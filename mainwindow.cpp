@@ -89,6 +89,7 @@ void MainWindow::on_pushButton_clicked()
         ui->listWidget->addItem(QString::number(numThread) + " threads");
         ui->listWidget->addItem("Hello!");
 
+        arr.clear();
         QList<int> current_line; // используется для заполнения, дальше не фигурирует
 
         for (int i = 0; i < nElem; i++)
@@ -240,6 +241,7 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
         ui->listWidget->addItem("Последовательное вычисление");
         ui->listWidget->addItem("Hello!");
 
+        arr.clear();
         QList<int> current_line; // используется для заполнения, дальше не фигурирует
 
         for (int i = 0; i < nElem; i++)
