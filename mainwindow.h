@@ -50,5 +50,6 @@ private:
     QList<QList<int>> arr;
     QList<Task> tasks;
     QFuture<int> future;
+    int nElem;
 };
 #endif // MAINWINDOW_H

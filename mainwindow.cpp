@@ -8,6 +8,8 @@
 #include <QThread>
 #include <string>
 #include <time.h>
+#include <QFile>
+#include <QIODevice>
 
 using namespace std;
 
@@ -68,11 +70,12 @@ void MainWindow::on_pushButton_clicked()
     // заполнить его рандомными числами
     // распараллелить программу, выделить каждому потоку собственный кусок массива, начать вычисление
     // сложить полученные с разных отрезков данные
+    QString outputLine = "";
 
     QString arrayLengthString = ui->lineEdit_2->text(); // достать из формы значения
     QString threadsNumberString = ui->lineEdit_3->text();
 
-    int nElem = arrayLengthString.toInt(); // перевести их в int
+    nElem = arrayLengthString.toInt(); // перевести их в int
     int numThread = threadsNumberString.toInt();
 
     if (nElem > 0 && numThread > 0) // налагаемые ограничения на вводимые данные
@@ -98,6 +101,20 @@ void MainWindow::on_pushButton_clicked()
             }
 
             arr.append(current_line);
+        }
+
+        // вывести матрицу в окне
+
+        ui->listBeforeSorting->clear();
+
+        for (int i = 0; i < nElem; i++)
+        {
+            outputLine.clear();
+            for (int j = 0; j < nElem; j++)
+            {
+                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+            }
+            ui->listBeforeSorting->addItem(outputLine);
         }
 
         time.start();
@@ -130,7 +147,6 @@ void MainWindow::on_pushButton_clicked()
         watcher->setFuture(future);
         ui->listWidget->addItem(QString::number(future.progressMinimum()) + " " +
                                 QString::number(future.progressValue()) + " " + QString::number(future.progressMaximum()));
-
     }
     else
     {
@@ -152,6 +168,19 @@ void MainWindow::finished()
     ui->pushButton->setEnabled(true);
     ui->pushButton_4->setEnabled(true);
     ui->pushButton_2->setEnabled(false);
+
+    QString outputLine = "";
+    ui->listAfterSorting->clear();
+
+    for (int i = 0; i < nElem; i++)
+    {
+        outputLine.clear();
+        for (int j = 0; j < nElem; j++)
+        {
+            outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+        }
+        ui->listAfterSorting->addItem(outputLine);
+    }
 
     tasks.clear();
     arr.clear();
@@ -225,6 +254,19 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
             arr.append(current_line);
         }
 
+        QString outputLine = "";
+        ui->listBeforeSorting->clear();
+
+        for (int i = 0; i < nElem; i++)
+        {
+            outputLine.clear();
+            for (int j = 0; j < nElem; j++)
+            {
+                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+            }
+            ui->listBeforeSorting->addItem(outputLine);
+        }
+
         time.start();
 
         ui->listWidget->addItem("Sorting");
@@ -256,6 +298,18 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
 
         ui->listWidget->addItem("Time elapsed: " + QString::number(time.elapsed()));
         ui->listWidget->addItem("-------------------------");
+
+        ui->listAfterSorting->clear();
+
+        for (int i = 0; i < nElem; i++)
+        {
+            outputLine.clear();
+            for (int j = 0; j < nElem; j++)
+            {
+                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+            }
+            ui->listAfterSorting->addItem(outputLine);
+        }
 
         ui->pushButton->setEnabled(true);
         ui->pushButton_4->setEnabled(true);
