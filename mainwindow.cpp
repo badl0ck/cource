@@ -1,4 +1,4 @@
-﻿#include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QtConcurrent/QtConcurrent>
@@ -28,7 +28,6 @@ MainWindow::~MainWindow()
 
 int perElementFunc(const Task tsk)
 {
-    int semiResult = 0;
     /*СОРТИРОВКА ДВУМЕРНОГО МАССИВА*/
     int temp = 0;
        for (int m = 0; m < (tsk.endIndex - tsk.beginIndex + 1) * tsk.nElem - 1; m++)   //сдвиги очередных элементов в правильную позицию
@@ -56,12 +55,7 @@ int perElementFunc(const Task tsk)
            }
       /*КОНЕЦ СОРТИРОВКИ ДВУМЕРНОГО МАССИВА*/
 
-    return semiResult;
-}
-
-void reduce(int & sum, const int semiSum)
-{
-    sum += semiSum;
+    return 0;
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -144,7 +138,7 @@ void MainWindow::on_pushButton_clicked()
         watcher = new QFutureWatcher<int>();
         connect(watcher, SIGNAL(progressValueChanged(int)), this, SLOT(progressValueChanged(int)));
         connect(watcher, SIGNAL(finished()), this, SLOT(finished()));
-        future = QtConcurrent::mappedReduced(tasks, perElementFunc, reduce);
+        future = QtConcurrent::mapped(tasks, perElementFunc);
         watcher->setFuture(future);
         ui->listWidget->addItem(QString::number(future.progressMinimum()) + " " +
                                 QString::number(future.progressValue()) + " " + QString::number(future.progressMaximum()));
@@ -164,7 +158,7 @@ void MainWindow::progressValueChanged(int v)
 
 void MainWindow::finished()
 {
-    ui->listWidget->addItem("Time elapsed: " + QString::number(time.elapsed()) + ", elements found: " + QString::number(future.result()));
+    ui->listWidget->addItem("Time elapsed: " + QString::number(time.elapsed()));
     ui->listWidget->addItem("-------------------------");
     ui->pushButton->setEnabled(true);
     ui->pushButton_4->setEnabled(true);
@@ -172,6 +166,20 @@ void MainWindow::finished()
 
     QString outputLine = "";
     ui->listAfterSorting->clear();
+
+    QList<int> temp;
+    for (int i = 0; i < nElem - 1; i++)
+    {
+        for (int j = 0; j < nElem - i - 1; j++)
+        {
+            if (arr.at(j).at(0) > arr.at(j + 1).at(0))
+            {
+                temp = arr.at(j);
+                arr.replace(j, arr.at(j + 1));
+                arr.replace(j + 1, temp);
+            }
+        }
+    }
 
     for (int i = 0; i < nElem; i++)
     {
@@ -274,7 +282,7 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
         ui->listWidget->addItem("Sorting");
 
         /*СОРТИРОВКА ДВУМЕРНОГО МАССИВА*/
-        int temp = 0;
+        int tempLineSort = 0;
            for (int m = 0; m < nElem * nElem - 1; m++)   //сдвиги очередных элементов в правильную позицию
                /*сдвиг элемента массива в правильную позицию*/
                for (int i = 0; i<nElem ; i++){
@@ -288,9 +296,9 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
                        /*КОНЕЦ АНАЛИЗА НА ПОСЛЕДНЮЮ СТРОКУ*/
 
                        if (currentLineSorting.at(j) > currentLineSorting.at(j+1)){ //Если элемент не на своей позиции
-                          temp = currentLineSorting.at(j);        //Обмен местами
+                          tempLineSort = currentLineSorting.at(j);        //Обмен местами
                           currentLineSorting.replace(j, currentLineSorting.at(j+1));
-                          currentLineSorting.replace(j+1, temp);
+                          currentLineSorting.replace(j+1, tempLineSort);
                        }
                   }
 
@@ -298,10 +306,25 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
                }
           /*КОНЕЦ СОРТИРОВКИ ДВУМЕРНОГО МАССИВА*/
 
+        QList<int> tempGeneralSort;
+        for (int i = 0; i < nElem - 1; i++)
+        {
+            for (int j = 0; j < nElem - i - 1; j++)
+            {
+                if (arr.at(j).at(0) > arr.at(j + 1).at(0))
+                {
+                    tempGeneralSort = arr.at(j);
+                    arr.replace(j, arr.at(j + 1));
+                    arr.replace(j + 1, tempGeneralSort);
+                }
+            }
+        }
+
         ui->listWidget->addItem("Time elapsed: " + QString::number(time.elapsed()));
         ui->listWidget->addItem("-------------------------");
 
         ui->listAfterSorting->clear();
+
 
         for (int i = 0; i < nElem; i++)
         {
