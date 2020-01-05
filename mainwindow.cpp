@@ -100,17 +100,22 @@ void MainWindow::on_pushButton_clicked()
 
         // вывести матрицу в окне
 
-        ui->listBeforeSorting->clear();
-
-        for (int i = 0; i < nElem; i++)
+        if (nElem < 10)
         {
-            outputLine.clear();
-            for (int j = 0; j < nElem; j++)
+            ui->listBeforeSorting->clear();
+
+            for (int i = 0; i < nElem; i++)
             {
-                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                outputLine.clear();
+                for (int j = 0; j < nElem; j++)
+                {
+                    outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                }
+                ui->listBeforeSorting->addItem(outputLine);
             }
-            ui->listBeforeSorting->addItem(outputLine);
         }
+
+
 
         time.start();
 
@@ -181,14 +186,17 @@ void MainWindow::finished()
         }
     }
 
-    for (int i = 0; i < nElem; i++)
+    if (nElem < 10)
     {
-        outputLine.clear();
-        for (int j = 0; j < nElem; j++)
+        for (int i = 0; i < nElem; i++)
         {
-            outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+            outputLine.clear();
+            for (int j = 0; j < nElem; j++)
+            {
+                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+            }
+            ui->listAfterSorting->addItem(outputLine);
         }
-        ui->listAfterSorting->addItem(outputLine);
     }
 
     tasks.clear();
@@ -265,16 +273,21 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
         }
 
         QString outputLine = "";
-        ui->listBeforeSorting->clear();
 
-        for (int i = 0; i < nElem; i++)
+        if (nElem < 10)
         {
-            outputLine.clear();
-            for (int j = 0; j < nElem; j++)
+
+            ui->listBeforeSorting->clear();
+
+            for (int i = 0; i < nElem; i++)
             {
-                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                outputLine.clear();
+                for (int j = 0; j < nElem; j++)
+                {
+                    outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                }
+                ui->listBeforeSorting->addItem(outputLine);
             }
-            ui->listBeforeSorting->addItem(outputLine);
         }
 
         time.start();
@@ -326,14 +339,17 @@ void MainWindow::on_pushButton_4_clicked() // последовательное �
         ui->listAfterSorting->clear();
 
 
-        for (int i = 0; i < nElem; i++)
+        if (nElem < 10)
         {
-            outputLine.clear();
-            for (int j = 0; j < nElem; j++)
+            for (int i = 0; i < nElem; i++)
             {
-                outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                outputLine.clear();
+                for (int j = 0; j < nElem; j++)
+                {
+                    outputLine.append(QString::number(arr.at(i).at(j)) + " ");
+                }
+                ui->listAfterSorting->addItem(outputLine);
             }
-            ui->listAfterSorting->addItem(outputLine);
         }
 
         ui->pushButton->setEnabled(true);
